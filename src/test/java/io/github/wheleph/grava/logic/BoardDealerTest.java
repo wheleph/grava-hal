@@ -4,6 +4,7 @@ import io.github.wheleph.grava.model.Board;
 import io.github.wheleph.grava.model.GameState;
 import io.github.wheleph.grava.model.GameStatus;
 import io.github.wheleph.grava.model.Player;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -51,5 +52,26 @@ public class BoardDealerTest {
         assertSame(GameStatus.IN_PROGRESS, gameState.getGameStatus());
         // Player 1 continues to be the current player because the last stone fell into the Grava Hal
         assertSame(Player.PLAYER_1, gameState.getCurrentPlayer());
+    }
+
+    @Ignore
+    @Test
+    public void testStoneCapture() {
+        Player player = Player.PLAYER_1;
+        Player otherPlayer = Player.PLAYER_1;
+        Board board = new Board(3, 2);
+        // make one of the pits empty
+        board.setPitStoneCount(player, 3, 0);
+
+        GameState gameState = boardDealer.move(board, player, 1);
+
+        assertSame(GameStatus.IN_PROGRESS, gameState.getGameStatus());
+        assertSame(Player.PLAYER_2, gameState.getCurrentPlayer());
+
+        Board updatedBoard = gameState.getBoard();
+        assertEquals(3, updatedBoard.getGravaHalStoneCount(player));
+        assertEquals(0, updatedBoard.getPitStoneCount(player, 3));
+        assertEquals(0, updatedBoard.getPitStoneCount(otherPlayer, 3));
+        assertEquals(0, updatedBoard.getGravaHalStoneCount(otherPlayer));
     }
 }
