@@ -53,4 +53,15 @@ public class BoardTest {
         assertEquals(newStoneCount, board.getGravaHalStoneCount(player));
     }
 
+    @Test
+    public void testClearAndGet() {
+        int initialStoneCount = 3;
+        int pitIndex = 1;
+        Board board = new Board(2, initialStoneCount);
+        int oldCount = board.clearAndGetCount(Player.PLAYER_1, pitIndex);
+
+        assertEquals(initialStoneCount, oldCount);
+        assertEquals(0, board.getPitStoneCount(Player.PLAYER_1, pitIndex));
+    }
+
 }

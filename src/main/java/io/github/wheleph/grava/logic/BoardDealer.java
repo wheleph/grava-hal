@@ -12,8 +12,7 @@ public class BoardDealer {
     public GameState move(Board board, Player player, int pitIndex) {
         Player nextPlayer = Player.nextPlayer(player);
 
-        int numberOfStones = board.getPitStoneCount(player, pitIndex);
-        board.setPitStoneCount(player, pitIndex, 0);
+        int numberOfStones = board.clearAndGetCount(player, pitIndex);
         int currPitIndex = pitIndex + 1;
         for (int i = 0; i < numberOfStones; i++) {
             if (currPitIndex <= board.getSize()) {

@@ -32,6 +32,12 @@ public class Board {
         playerPits.get(player).set(pitIndex, stoneCount);
     }
 
+    public int clearAndGetCount(Player player, int pitIndex) {
+        int numberOfStones = getPitStoneCount(player, pitIndex);
+        setPitStoneCount(player, pitIndex, 0);
+        return numberOfStones;
+    }
+
     private List<Integer> initPlayerPits(int boardSize, int initialStoneCount) {
         List<Integer> playerPits = new ArrayList<>(boardSize + 1);
         playerPits.add(0);
