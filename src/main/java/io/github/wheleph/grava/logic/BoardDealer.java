@@ -10,7 +10,6 @@ public class BoardDealer {
     static final int INITIAL_NUMBER_OF_STONES = 6;
 
     public GameState move(Board board, Player player, int pitIndex) {
-        Player nextPlayer = Player.nextPlayer(player);
 
         int numberOfStones = board.clearAndGetCount(player, pitIndex);
         int currPitIndex = pitIndex + 1;
@@ -24,6 +23,13 @@ public class BoardDealer {
                 board.setGravaHalStoneCount(player, currNumberOfStones + 1);
                 currPitIndex = 1;
             }
+        }
+
+        Player nextPlayer;
+        if (currPitIndex == 1) {
+            nextPlayer = player;
+        } else {
+            nextPlayer = Player.nextPlayer(player);
         }
 
         return new GameState(board, nextPlayer, GameStatus.IN_PROGRESS);

@@ -42,4 +42,14 @@ public class BoardDealerTest {
         assertEquals(expectedBoard, gameState.getBoard());
     }
 
+    @Test
+    public void testAdditionalMove() {
+        Board board = new Board(3, 2);
+
+        GameState gameState = boardDealer.move(board, Player.PLAYER_1, 2);
+
+        assertSame(GameStatus.IN_PROGRESS, gameState.getGameStatus());
+        // Player 1 continues to be the current player because the last stone fell into the Grava Hal
+        assertSame(Player.PLAYER_1, gameState.getCurrentPlayer());
+    }
 }
