@@ -9,7 +9,7 @@ public class BoardTest {
     public void testBoardCreation() {
         final int boardSize = 2;
         final int initialStoneCount = 3;
-        Board board = new Board(boardSize, initialStoneCount);
+        Board board = new Board(boardSize, initialStoneCount, Player.PLAYER_1);
 
         // Test pit initialization
         assertEquals(initialStoneCount, board.getPitStoneCount(Player.PLAYER_1, 1));
@@ -26,7 +26,7 @@ public class BoardTest {
     public void testSetPitStoneCount() {
         final int boardSize = 2;
         final int initialStoneCount = 3;
-        Board board = new Board(boardSize, initialStoneCount);
+        Board board = new Board(boardSize, initialStoneCount, Player.PLAYER_1);
 
         Player player = Player.PLAYER_1;
         int pitIndex = 2;
@@ -40,7 +40,7 @@ public class BoardTest {
 
     @Test
     public void testSetGravaHalStoneCount() {
-        Board board = new Board(2, 3);
+        Board board = new Board(2, 3, Player.PLAYER_1);
 
         Player player = Player.PLAYER_1;
         int newStoneCount = 10;
@@ -56,7 +56,7 @@ public class BoardTest {
     public void testClearAndGet() {
         int initialStoneCount = 3;
         int pitIndex = 1;
-        Board board = new Board(2, initialStoneCount);
+        Board board = new Board(2, initialStoneCount, Player.PLAYER_1);
         int oldCount = board.clearAndGetCount(Player.PLAYER_1, pitIndex);
 
         assertEquals(initialStoneCount, oldCount);
@@ -74,7 +74,7 @@ public class BoardTest {
 
     @Test
     public void testBasicMove() {
-        Board board = new Board(4, 6);
+        Board board = new Board(4, 6, Player.PLAYER_1);
 
         GameState gameState = board.move(Player.PLAYER_1, 1);
 
@@ -83,7 +83,7 @@ public class BoardTest {
         assertSame(Player.PLAYER_2, gameState.getCurrentPlayer());
 
         // Assert board
-        Board expectedBoard = new Board(4, 6);
+        Board expectedBoard = new Board(4, 6, Player.PLAYER_1);
         expectedBoard.setPitStoneCount(Player.PLAYER_1, 1, 1);
         expectedBoard.setPitStoneCount(Player.PLAYER_1, 2, 8);
         expectedBoard.setPitStoneCount(Player.PLAYER_1, 3, 7);
@@ -94,7 +94,7 @@ public class BoardTest {
 
     @Test
     public void testAdditionalMove() {
-        Board board = new Board(3, 2);
+        Board board = new Board(3, 2, Player.PLAYER_1);
 
         GameState gameState = board.move(Player.PLAYER_1, 2);
 
@@ -105,7 +105,7 @@ public class BoardTest {
 
     @Test
     public void testEndGameWin() {
-        Board board = new Board(3, 1);
+        Board board = new Board(3, 1, Player.PLAYER_1);
         board.setPitStoneCount(Player.PLAYER_1, 1, 0);
         board.setPitStoneCount(Player.PLAYER_1, 2, 0);
 
@@ -117,7 +117,7 @@ public class BoardTest {
 
     @Test
     public void testEndGameDraw() {
-        Board board = new Board(1, 1);
+        Board board = new Board(1, 1, Player.PLAYER_1);
 
         GameState gameState = board.move(Player.PLAYER_1, 1);
 
@@ -128,7 +128,7 @@ public class BoardTest {
     public void testStoneCapture() {
         Player player = Player.PLAYER_1;
         Player otherPlayer = Player.PLAYER_2;
-        Board board = new Board(3, 2);
+        Board board = new Board(3, 2, Player.PLAYER_1);
         // make one of the pits empty
         board.setPitStoneCount(player, 3, 0);
 
@@ -146,10 +146,18 @@ public class BoardTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidMoveEmptyPit() {
-        Board board = new Board(1, 1);
+        Board board = new Board(1, 1, Player.PLAYER_1);
         int pitIndex = 1;
         board.setPitStoneCount(Player.PLAYER_1, pitIndex, 0);
 
         board.move(Player.PLAYER_1, pitIndex);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidMoveWrongPlayer() {
+        Board board = new Board(3, 2, Player.PLAYER_1);
+
+        board.move(Player.PLAYER_1, 1);
+        board.move(Player.PLAYER_1, 2);
     }
 }

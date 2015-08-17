@@ -8,16 +8,18 @@ public class Board {
 
     private int size;
     private Map<Player, List<Integer>> playerPits = new HashMap<>();
+    private Player currentPlayer;
 
     public Board() {
-        this(BOARD_SIZE, INITIAL_NUMBER_OF_STONES);
+        this(BOARD_SIZE, INITIAL_NUMBER_OF_STONES, Player.PLAYER_1);
     }
 
-    public Board(int size, int initialStoneCount) {
+    public Board(int size, int initialStoneCount, Player initialPlayer) {
         this.size = size;
         for (Player player : Player.values()) {
             playerPits.put(player, initPlayerPits(size, initialStoneCount));
         }
+        this.currentPlayer = initialPlayer;
     }
 
     public int getGravaHalStoneCount(Player player) {
@@ -56,6 +58,10 @@ public class Board {
     }
 
     public GameState move(Player player, int pitIndex) {
+        if (player != currentPlayer) {
+            throw new IllegalArgumentException("Wrong player");
+        }
+
         int numberOfStones = clearAndGetCount(player, pitIndex);
         if (numberOfStones == 0) {
             throw new IllegalArgumentException("Cannot sow stones from empty pit");
@@ -106,6 +112,7 @@ public class Board {
             }
         }
 
+        currentPlayer = nextPlayer;
         return new GameState(this, nextPlayer, gameStatus);
     }
 
