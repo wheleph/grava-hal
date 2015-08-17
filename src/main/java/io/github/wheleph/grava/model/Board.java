@@ -55,6 +55,7 @@ public class Board {
         return size;
     }
 
+    // TODO assert that pit should not be empty
     public GameState move(Player player, int pitIndex) {
         int numberOfStones = clearAndGetCount(player, pitIndex);
         int currPitIndex = pitIndex + 1;
@@ -86,9 +87,38 @@ public class Board {
             }
         }
 
-        return new GameState(this, nextPlayer, GameStatus.IN_PROGRESS);
+        int playerNumberOfStones = getNumberOfStonesInPits(player);
+        GameStatus gameStatus = GameStatus.IN_PROGRESS;
+        if (playerNumberOfStones == 0) {
+            Player otherPlayer = Player.nextPlayer(player);
+            int playerTotalNumberOfStones = getTotalNumberOfStones(player);
+            int otherPlayerTotalNumberOfStones = getTotalNumberOfStones(otherPlayer);
+            if (otherPlayerTotalNumberOfStones > playerTotalNumberOfStones) {
+                nextPlayer = otherPlayer;
+                gameStatus = GameStatus.WON;
+            } else if (otherPlayerTotalNumberOfStones < playerTotalNumberOfStones) {
+                nextPlayer = player;
+                gameStatus = GameStatus.WON;
+            } else {
+                gameStatus = GameStatus.DRAW;
+            }
+        }
+
+        return new GameState(this, nextPlayer, gameStatus);
     }
 
+    private int getNumberOfStonesInPits(Player player) {
+        List<Integer> pits = playerPits.get(player);
+        int totalNumberOfStones = 0;
+        for (int i = 1; i < pits.size(); i++) {
+            totalNumberOfStones += pits.get(i);
+        }
+        return totalNumberOfStones;
+    }
+
+    private int getTotalNumberOfStones(Player player) {
+        return getNumberOfStonesInPits(player) + getGravaHalStoneCount(player);
+    }
 
     @Override
     public boolean equals(Object o) {

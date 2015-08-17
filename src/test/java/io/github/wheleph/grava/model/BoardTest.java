@@ -104,6 +104,27 @@ public class BoardTest {
     }
 
     @Test
+    public void testEndGameWin() {
+        Board board = new Board(3, 1);
+        board.setPitStoneCount(Player.PLAYER_1, 1, 0);
+        board.setPitStoneCount(Player.PLAYER_1, 2, 0);
+
+        GameState gameState = board.move(Player.PLAYER_1, 3);
+
+        assertSame(GameStatus.WON, gameState.getGameStatus());
+        assertSame(Player.PLAYER_2, gameState.getCurrentPlayer());
+    }
+
+    @Test
+    public void testEndGameDraw() {
+        Board board = new Board(1, 1);
+
+        GameState gameState = board.move(Player.PLAYER_1, 1);
+
+        assertSame(GameStatus.DRAW, gameState.getGameStatus());
+    }
+
+    @Test
     public void testStoneCapture() {
         Player player = Player.PLAYER_1;
         Player otherPlayer = Player.PLAYER_2;
