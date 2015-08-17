@@ -2,8 +2,7 @@ package io.github.wheleph.grava.model;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 
 public class BoardTest {
     @Test
@@ -62,6 +61,66 @@ public class BoardTest {
 
         assertEquals(initialStoneCount, oldCount);
         assertEquals(0, board.getPitStoneCount(Player.PLAYER_1, pitIndex));
+    }
+
+    @Test
+    public void testCreateDefaultBoard() {
+        Board board = new Board();
+
+        assertNotNull(board);
+        assertEquals(Board.INITIAL_NUMBER_OF_STONES, board.getPitStoneCount(Player.PLAYER_1, 1));
+        assertEquals(Board.INITIAL_NUMBER_OF_STONES, board.getPitStoneCount(Player.PLAYER_2, 1));
+    }
+
+    @Test
+    public void testBasicMove() {
+        Board board = new Board(4, 6);
+
+        GameState gameState = board.move(Player.PLAYER_1, 1);
+
+        assertNotNull(gameState);
+        assertSame(GameStatus.IN_PROGRESS, gameState.getGameStatus());
+        assertSame(Player.PLAYER_2, gameState.getCurrentPlayer());
+
+        // Assert board
+        Board expectedBoard = new Board(4, 6);
+        expectedBoard.setPitStoneCount(Player.PLAYER_1, 1, 1);
+        expectedBoard.setPitStoneCount(Player.PLAYER_1, 2, 8);
+        expectedBoard.setPitStoneCount(Player.PLAYER_1, 3, 7);
+        expectedBoard.setPitStoneCount(Player.PLAYER_1, 4, 7);
+        expectedBoard.setGravaHalStoneCount(Player.PLAYER_1, 1);
+        assertEquals(expectedBoard, gameState.getBoard());
+    }
+
+    @Test
+    public void testAdditionalMove() {
+        Board board = new Board(3, 2);
+
+        GameState gameState = board.move(Player.PLAYER_1, 2);
+
+        assertSame(GameStatus.IN_PROGRESS, gameState.getGameStatus());
+        // Player 1 continues to be the current player because the last stone fell into the Grava Hal
+        assertSame(Player.PLAYER_1, gameState.getCurrentPlayer());
+    }
+
+    @Test
+    public void testStoneCapture() {
+        Player player = Player.PLAYER_1;
+        Player otherPlayer = Player.PLAYER_2;
+        Board board = new Board(3, 2);
+        // make one of the pits empty
+        board.setPitStoneCount(player, 3, 0);
+
+        GameState gameState = board.move(player, 1);
+
+        assertSame(GameStatus.IN_PROGRESS, gameState.getGameStatus());
+        assertSame(otherPlayer, gameState.getCurrentPlayer());
+
+        Board updatedBoard = gameState.getBoard();
+        assertEquals(3, updatedBoard.getGravaHalStoneCount(player));
+        assertEquals(0, updatedBoard.getPitStoneCount(player, 3));
+        assertEquals(0, updatedBoard.getPitStoneCount(otherPlayer, 3));
+        assertEquals(0, updatedBoard.getGravaHalStoneCount(otherPlayer));
     }
 
 }

@@ -2,12 +2,16 @@ package io.github.wheleph.grava.model;
 
 import java.util.*;
 
-/**
- * Simple POJO that represents Grava Hal board.
- */
 public class Board {
+    static final int BOARD_SIZE = 6;
+    static final int INITIAL_NUMBER_OF_STONES = 6;
+
     private int size;
     private Map<Player, List<Integer>> playerPits = new HashMap<>();
+
+    public Board() {
+        this(BOARD_SIZE, INITIAL_NUMBER_OF_STONES);
+    }
 
     public Board(int size, int initialStoneCount) {
         this.size = size;
@@ -50,6 +54,41 @@ public class Board {
     public int getSize() {
         return size;
     }
+
+    public GameState move(Player player, int pitIndex) {
+        int numberOfStones = clearAndGetCount(player, pitIndex);
+        int currPitIndex = pitIndex + 1;
+        for (int i = 0; i < numberOfStones; i++) {
+            if (currPitIndex <= getSize()) {
+                int currNumberOfStones = getPitStoneCount(player, currPitIndex);
+                setPitStoneCount(player, currPitIndex, currNumberOfStones + 1);
+                currPitIndex++;
+            } else {
+                int currNumberOfStones = getGravaHalStoneCount(player);
+                setGravaHalStoneCount(player, currNumberOfStones + 1);
+                currPitIndex = 1;
+            }
+        }
+
+        Player nextPlayer;
+        if (currPitIndex == 1) {
+            nextPlayer = player;
+        } else {
+            nextPlayer = Player.nextPlayer(player);
+            int lastPit = currPitIndex - 1;
+            if (getPitStoneCount(player, lastPit) == 1) {
+                int otherPlayerCount = getPitStoneCount(nextPlayer, lastPit);
+                int oldGravaHalCount = getGravaHalStoneCount(player);
+                setGravaHalStoneCount(player, 1 + otherPlayerCount + oldGravaHalCount);
+
+                clearAndGetCount(player, lastPit);
+                clearAndGetCount(nextPlayer, lastPit);
+            }
+        }
+
+        return new GameState(this, nextPlayer, GameStatus.IN_PROGRESS);
+    }
+
 
     @Override
     public boolean equals(Object o) {
