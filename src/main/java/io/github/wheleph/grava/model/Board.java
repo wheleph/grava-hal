@@ -55,9 +55,11 @@ public class Board {
         return size;
     }
 
-    // TODO assert that pit should not be empty
     public GameState move(Player player, int pitIndex) {
         int numberOfStones = clearAndGetCount(player, pitIndex);
+        if (numberOfStones == 0) {
+            throw new IllegalArgumentException("Cannot sow stones from empty pit");
+        }
         int currPitIndex = pitIndex + 1;
         for (int i = 0; i < numberOfStones; i++) {
             if (currPitIndex <= getSize()) {

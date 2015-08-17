@@ -144,4 +144,12 @@ public class BoardTest {
         assertEquals(0, updatedBoard.getGravaHalStoneCount(otherPlayer));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidMoveEmptyPit() {
+        Board board = new Board(1, 1);
+        int pitIndex = 1;
+        board.setPitStoneCount(Player.PLAYER_1, pitIndex, 0);
+
+        board.move(Player.PLAYER_1, pitIndex);
+    }
 }
