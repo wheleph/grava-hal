@@ -1,15 +1,14 @@
 package io.github.wheleph.grava.model;
 
-// TODO think about better name for this class
 public class GameState {
     private Board board;
+    private GamePhase gamePhase;
     private Player currentPlayer;
-    private GameStatus gameStatus;
 
-    public GameState(Board board, Player currentPlayer, GameStatus gameStatus) {
+    public GameState(Board board, Player currentPlayer, GamePhase gamePhase) {
         this.board = board;
         this.currentPlayer = currentPlayer;
-        this.gameStatus = gameStatus;
+        this.gamePhase = gamePhase;
     }
 
     public Board getBoard() {
@@ -20,7 +19,7 @@ public class GameState {
         return currentPlayer;
     }
 
-    public GameStatus getGameStatus() {
-        return gameStatus;
+    public GamePhase getGamePhase() {
+        return gamePhase;
     }
 }

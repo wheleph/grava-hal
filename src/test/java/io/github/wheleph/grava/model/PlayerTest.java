@@ -2,14 +2,18 @@ package io.github.wheleph.grava.model;
 
 import org.junit.Test;
 
-import static io.github.wheleph.grava.model.Player.*;
-import static org.junit.Assert.*;
+import static io.github.wheleph.grava.model.Player.PLAYER_1;
+import static io.github.wheleph.grava.model.Player.PLAYER_2;
+import static io.github.wheleph.grava.model.Player.fromIndex;
+import static io.github.wheleph.grava.model.Player.nextPlayer;
+import static io.github.wheleph.grava.model.Player.values;
+import static org.junit.Assert.assertEquals;
 
 public class PlayerTest {
     @Test
     public void testFromIndex() {
-        assertSame(PLAYER_1, fromIndex(1));
-        assertSame(PLAYER_2, fromIndex(2));
+        assertEquals(PLAYER_1, fromIndex(1));
+        assertEquals(PLAYER_2, fromIndex(2));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -25,8 +29,8 @@ public class PlayerTest {
 
     @Test
     public void testNextPlayer() {
-        assertSame(PLAYER_2, nextPlayer(PLAYER_1));
-        assertSame(PLAYER_1, nextPlayer(PLAYER_2));
+        assertEquals(PLAYER_2, nextPlayer(PLAYER_1));
+        assertEquals(PLAYER_1, nextPlayer(PLAYER_2));
     }
 
 }
