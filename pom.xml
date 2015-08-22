@@ -35,7 +35,6 @@
                     </connectors>
                 </configuration>
             </plugin>
-            <!-- TODO specify version of other plugins explicitly -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

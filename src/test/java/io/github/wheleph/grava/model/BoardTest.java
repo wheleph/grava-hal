@@ -93,7 +93,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testAdditionalMove() {
+    public void testExtraMove() {
         Board board = new Board(3, 2, Player.PLAYER_1);
 
         GameState gameState = board.move(Player.PLAYER_1, 2);
