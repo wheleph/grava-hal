@@ -77,6 +77,7 @@ public class GameLogic {
         GamePhase gamePhase = GamePhase.IN_PROGRESS;
         int playerNumberOfStones = getNumberOfStonesInPits(player);
         if (playerNumberOfStones == 0) {
+            // TODO put stones of another player into his Grava hal
             int playerTotalNumberOfStones = getTotalNumberOfStones(player);
             int otherPlayerTotalNumberOfStones = getTotalNumberOfStones(otherPlayer);
             if (otherPlayerTotalNumberOfStones > playerTotalNumberOfStones) {
