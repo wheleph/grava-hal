@@ -22,10 +22,10 @@ public class GameLogic {
         this(BOARD_SIZE, INITIAL_NUMBER_OF_STONES, Player.PLAYER_1);
     }
 
-    public GameLogic(int size, int initialStoneCount, Player initialPlayer) {
+    public GameLogic(int numberOfPits, int initialStoneCount, Player initialPlayer) {
         Map<Player, List<Integer>> initialPlayerPits = new HashMap<>();
         for (Player player : Player.values()) {
-            initialPlayerPits.put(player, initPlayerPits(size, initialStoneCount));
+            initialPlayerPits.put(player, initPlayerPits(numberOfPits, initialStoneCount));
         }
 
         init(initialPlayerPits, initialPlayer, GamePhase.IN_PROGRESS);
@@ -35,52 +35,48 @@ public class GameLogic {
         init(playerPits, currentPlayer, currentGamePhase);
     }
 
-    public int getSize() {
-        return size;
-    }
-
     public GameState move(Player player, int pitIndex) {
         if (player != currentPlayer) {
             throw new IllegalArgumentException("Wrong player");
         }
 
+        Player otherPlayer = Player.nextPlayer(player);
+
         int numberOfStones = clearAndGetCount(player, pitIndex);
         if (numberOfStones == 0) {
             throw new IllegalArgumentException("Cannot sow stones from empty pit");
         }
-        int currPitIndex = pitIndex + 1;
-        for (int i = 0; i < numberOfStones; i++) {
-            if (currPitIndex <= getSize()) {
-                int currNumberOfStones = getPitStoneCount(player, currPitIndex);
-                setPitStoneCount(player, currPitIndex, currNumberOfStones + 1);
-                currPitIndex++;
-            } else {
-                int currNumberOfStones = getGravaHalStoneCount(player);
-                setGravaHalStoneCount(player, currNumberOfStones + 1);
-                currPitIndex = 1;
-            }
+
+        // seed stones from the pit
+        int lastSeededPitIndex = pitIndex;
+        for (int i = 1; i <= numberOfStones; i++) {
+            List<Integer> currentPlayerPits = playerPits.get(currentPlayer);
+            lastSeededPitIndex = (pitIndex + i) % (size + 1);
+            int currNumberOfStones = currentPlayerPits.get(lastSeededPitIndex);
+            currentPlayerPits.set(lastSeededPitIndex, currNumberOfStones + 1);
         }
 
         Player nextPlayer;
-        if (currPitIndex == 1) {
+        if (lastSeededPitIndex == GRAVA_HAL_PIT_INDEX) {
             nextPlayer = player;
         } else {
             nextPlayer = Player.nextPlayer(player);
-            int lastPit = currPitIndex - 1;
-            if (getPitStoneCount(player, lastPit) == 1) {
-                int otherPlayerCount = getPitStoneCount(nextPlayer, lastPit);
-                int oldGravaHalCount = getGravaHalStoneCount(player);
-                setGravaHalStoneCount(player, 1 + otherPlayerCount + oldGravaHalCount);
 
-                clearAndGetCount(player, lastPit);
-                clearAndGetCount(nextPlayer, lastPit);
+            // Determine if opposite player pit is captured
+            if (getPitStoneCount(player, lastSeededPitIndex) == 1) {
+                int oldGravaHalCount = getGravaHalStoneCount(player);
+                int oppositePlayerPitCount = getPitStoneCount(otherPlayer, lastSeededPitIndex);
+                setGravaHalStoneCount(player, 1 + oppositePlayerPitCount + oldGravaHalCount);
+
+                clearAndGetCount(player, lastSeededPitIndex);
+                clearAndGetCount(otherPlayer, lastSeededPitIndex);
             }
         }
 
-        int playerNumberOfStones = getNumberOfStonesInPits(player);
+        // Determine if the game ended
         GamePhase gamePhase = GamePhase.IN_PROGRESS;
+        int playerNumberOfStones = getNumberOfStonesInPits(player);
         if (playerNumberOfStones == 0) {
-            Player otherPlayer = Player.nextPlayer(player);
             int playerTotalNumberOfStones = getTotalNumberOfStones(player);
             int otherPlayerTotalNumberOfStones = getTotalNumberOfStones(otherPlayer);
             if (otherPlayerTotalNumberOfStones > playerTotalNumberOfStones) {
@@ -95,7 +91,7 @@ public class GameLogic {
         }
 
         this.gamePhase = gamePhase;
-        currentPlayer = nextPlayer;
+        this.currentPlayer = nextPlayer;
         return getGameState();
     }
 
