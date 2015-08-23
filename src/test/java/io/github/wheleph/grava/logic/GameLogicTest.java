@@ -156,6 +156,11 @@ public class GameLogicTest {
 
         assertEquals(GamePhase.WIN, gameState.getGamePhase());
         assertEquals(Player.PLAYER_2, gameState.getCurrentPlayer());
+
+        // Verify that remaining stones were put in players' grava hals
+        Board board = gameState.getBoard();
+        assertEquals(1, board.getGravaHalStoneCount(Player.PLAYER_1));
+        assertEquals(3, board.getGravaHalStoneCount(Player.PLAYER_2));
     }
 
     @Test
@@ -166,6 +171,12 @@ public class GameLogicTest {
         GameState gameState = gameLogic.move(Player.PLAYER_1, 1);
 
         assertEquals(GamePhase.DRAW, gameState.getGamePhase());
+
+        // Verify that remaining stones were put in players' grava hals
+        Board board = gameState.getBoard();
+        assertEquals(1, board.getGravaHalStoneCount(Player.PLAYER_1));
+        assertEquals(1, board.getGravaHalStoneCount(Player.PLAYER_2));
+        assertEquals(0, board.getPitStoneCount(Player.PLAYER_2, 1));
     }
 
     @Test
