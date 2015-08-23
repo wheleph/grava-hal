@@ -1,23 +1,24 @@
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
-        <title>Game of Grava Hal</title>
+        <title><spring:message code="title" /></title>
     </head>
     <body>
         <table border="1" cellspacing="0">
             <tr>
                 <td></td>
-                <td>Grava Hal</td>
-                <td>Pit</td>
-                <td>Pit</td>
-                <td>Pit</td>
-                <td>Pit</td>
-                <td>Pit</td>
-                <td>Pit</td>
-                <td>Grava Hal</td>
+                <td><spring:message code="board.grava.hal"/></td>
+                <td><spring:message code="board.pit"/></td>
+                <td><spring:message code="board.pit"/></td>
+                <td><spring:message code="board.pit"/></td>
+                <td><spring:message code="board.pit"/></td>
+                <td><spring:message code="board.pit"/></td>
+                <td><spring:message code="board.pit"/></td>
+                <td><spring:message code="board.grava.hal"/></td>
             </tr>
             <tr>
-                <td>Player 1</td>
+                <td><spring:message code="name.player1"/></td>
                 <td bgcolor="black">&nbsp;</td>
                 <td>
                     <%--TODO think how to extract this common part into some fragment--%>
@@ -65,7 +66,7 @@
                 <td>${gameModelViewBean.gameState.board.getGravaHalStoneCount('PLAYER_1')}</td>
             </tr>
             <tr>
-                <td>Player 2</td>
+                <td><spring:message code="name.player2"/></td>
                 <td>${gameModelViewBean.gameState.board.getGravaHalStoneCount('PLAYER_2')}</td>
                 <td>
                     <form action="move" method="POST">
@@ -114,7 +115,7 @@
         </table>
         <p>${gameModelViewBean.message}</p>
         <form action="end_game" method="POST">
-            <button type="submit">End game</button>
+            <button type="submit"><spring:message code="button.end.game"/></button>
         </form>
     </body>
 </html>

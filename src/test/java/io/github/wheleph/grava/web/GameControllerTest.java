@@ -139,7 +139,7 @@ public class GameControllerTest {
                 .andReturn();
 
         GameModelViewBean gameModelViewBean = getGameModelViewBean(mvcResult);
-        assertTrue(gameModelViewBean.getMessage().startsWith("Error"));
+        assertTrue(gameModelViewBean.getMessage().toLowerCase().contains("error"));
     }
 
     @Test

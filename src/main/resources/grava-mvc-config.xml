@@ -21,6 +21,11 @@
     <!-- Uncomment this if any static resources are needed -->
     <!--<mvc:resources mapping="/resources/**" location="/resources/" />-->
 
+    <bean id="messageSource"
+          class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="messages" />
+    </bean>
+
     <mvc:annotation-driven />
 
 </beans>
