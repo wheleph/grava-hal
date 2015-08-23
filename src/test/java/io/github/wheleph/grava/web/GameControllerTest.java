@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -35,6 +36,9 @@ public class GameControllerTest {
     @Autowired
     private WebApplicationContext wac;
 
+    @Autowired
+    MockHttpSession session;
+
     private MockMvc mockMvc;
 
     @Before
@@ -51,6 +55,7 @@ public class GameControllerTest {
                 .andExpect(view().name(VIEW_INIT));
     }
 
+    // TODO test multiple sessions
     @Test
     public void testStartGame() throws Exception {
         MvcResult mvcResult = mockMvc.perform(post("/start_game"))
@@ -76,6 +81,7 @@ public class GameControllerTest {
 
     @Test
     public void testEndGame() throws Exception {
+        // TODO think how to test end game better
         mockMvc.perform(post("/end_game"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(VIEW_INIT));
