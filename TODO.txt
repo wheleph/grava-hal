@@ -1,3 +1,4 @@
 TODO add README.md
 TODO add javadocs
-TODO synch about concurrency
+TODO think about concurrency
+TODO add logging

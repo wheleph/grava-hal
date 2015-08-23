@@ -4,9 +4,9 @@
         <title>Game of Grava Hal</title>
     </head>
     <body>
-        <h2>This is game.jsp!!</h2>
-        <form action="end_game" method="POST">
-            <button type="submit">End game</button>
+        <p>Hit the button to start the game.</p>
+        <form action="start_game" method="POST">
+            <button type="submit">Start game</button>
         </form>
     </body>
 </html>

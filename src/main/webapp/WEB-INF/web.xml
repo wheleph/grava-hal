@@ -10,7 +10,7 @@
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>/WEB-INF/grava-mvc-config.xml</param-value>
+            <param-value>classpath:grava-mvc-config.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -26,6 +26,6 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/grava-core-mvc-config.xml</param-value>
+        <param-value>classpath:grava-core-config.xml</param-value>
     </context-param>
 </web-app>

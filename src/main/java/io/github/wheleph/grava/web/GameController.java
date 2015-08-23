@@ -6,8 +6,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class GameController {
+
+    public static final String INIT_VIEW = "init";
+    public static final String GAME_VIEW = "game";
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index() {
-        return "game";
+        return INIT_VIEW;
+    }
+
+    // TODO make url not updated in browser url box
+    @RequestMapping(value = "/start_game", method = RequestMethod.POST)
+    public String startGame() {
+        return GAME_VIEW;
+    }
+
+    @RequestMapping(value = "/end_game", method = RequestMethod.POST)
+    public String endGame() {
+        return INIT_VIEW;
     }
 }
