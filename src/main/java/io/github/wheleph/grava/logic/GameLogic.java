@@ -13,8 +13,7 @@ public class GameLogic {
     private static final int GRAVA_HAL_PIT_INDEX = 0;
 
     private int size;
-    // TODO MAKE THIS IMPLEMENTATION FASTER BY USING ARRAYS
-    private Map<Player, List<Integer>> playerPits = new HashMap<>();
+    private Map<Player, List<Integer>> playerPits = new EnumMap<>(Player.class);
     private Player currentPlayer;
     private GamePhase gamePhase;
 
