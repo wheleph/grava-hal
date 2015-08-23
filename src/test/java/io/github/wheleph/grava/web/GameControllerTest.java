@@ -20,11 +20,12 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.Map;
 import java.util.UUID;
 
-import static io.github.wheleph.grava.web.GameController.BEAN_GAME_STATE;
+import static io.github.wheleph.grava.web.GameController.GAME_MODEL_VIEW_BEAN;
 import static io.github.wheleph.grava.web.GameController.VIEW_GAME;
 import static io.github.wheleph.grava.web.GameController.VIEW_INIT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,7 +39,6 @@ public class GameControllerTest {
     private WebApplicationContext wac;
 
     private MockHttpSession session1;
-    private MockHttpSession session2;
 
     private MockMvc mockMvc;
 
@@ -49,7 +49,6 @@ public class GameControllerTest {
                 .build();
 
         session1 = new MockHttpSession(wac.getServletContext(), UUID.randomUUID().toString());
-        session2 = new MockHttpSession(wac.getServletContext(), UUID.randomUUID().toString());
     }
 
     @Test
@@ -106,6 +105,19 @@ public class GameControllerTest {
     }
 
     @Test
+    public void testWrongMove() throws Exception {
+        mockMvc.perform(post("/start_game").session(session1))
+                .andExpect(status().isOk());
+
+        MvcResult mvcResult = mockMvc.perform(post("/move").param("player", "PLAYER_2").param("pitIndex", "2").session(session1))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        GameModelViewBean gameModelViewBean = getGameModelViewBean(mvcResult);
+        assertTrue(gameModelViewBean.getMessage().startsWith("Error"));
+    }
+
+    @Test
     public void testEndGame() throws Exception {
         // TODO think how to test end game better
         mockMvc.perform(post("/end_game"))
@@ -114,9 +126,16 @@ public class GameControllerTest {
     }
 
     private GameState getGameState(MvcResult mvcResult) {
-        Map<String, Object> model = mvcResult.getModelAndView().getModel();
-        GameState gameState = (GameState) model.get(BEAN_GAME_STATE);
+        GameModelViewBean gameModelViewBean = getGameModelViewBean(mvcResult);
+        GameState gameState = gameModelViewBean.getGameState();
         assertNotNull(gameState);
         return gameState;
+    }
+
+    private GameModelViewBean getGameModelViewBean(MvcResult mvcResult) {
+        Map<String, Object> model = mvcResult.getModelAndView().getModel();
+        GameModelViewBean gameModelViewBean = (GameModelViewBean) model.get(GAME_MODEL_VIEW_BEAN);
+        assertNotNull(gameModelViewBean);
+        return gameModelViewBean;
     }
 }

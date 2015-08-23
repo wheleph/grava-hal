@@ -24,4 +24,8 @@ public class GameService {
     public void endGame() {
         gameLogic = null;
     }
+
+    public GameState getGameState() {
+        return gameLogic.getGameState();
+    }
 }
