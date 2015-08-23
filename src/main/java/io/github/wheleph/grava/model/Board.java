@@ -17,7 +17,6 @@ public class Board {
         return playerPits.get(player).get(GRAVA_HAL_PIT_INDEX);
     }
 
-    // TODO check that pit index is correct
     public int getPitStoneCount(Player player, int pitIndex) {
         return playerPits.get(player).get(pitIndex);
     }

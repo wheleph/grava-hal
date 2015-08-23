@@ -129,17 +129,14 @@ public class GameLogic {
         return playerPits.get(player).get(Board.GRAVA_HAL_PIT_INDEX);
     }
 
-    // TODO check that pit index is correct
     private void setPitStoneCount(Player player, int pitIndex, int stoneCount) {
         playerPits.get(player).set(pitIndex, stoneCount);
     }
 
-    // TODO check that pit index is correct
     private int getPitStoneCount(Player player, int pitIndex) {
         return playerPits.get(player).get(pitIndex);
     }
 
-    // TODO check that pit index is correct
     int clearAndGetCount(Player player, int pitIndex) {
         int numberOfStones = getPitStoneCount(player, pitIndex);
         setPitStoneCount(player, pitIndex, 0);
