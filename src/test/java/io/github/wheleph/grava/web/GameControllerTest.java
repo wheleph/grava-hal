@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Map;
+import java.util.UUID;
 
 import static io.github.wheleph.grava.web.GameController.BEAN_GAME_STATE;
 import static io.github.wheleph.grava.web.GameController.VIEW_GAME;
@@ -36,8 +37,8 @@ public class GameControllerTest {
     @Autowired
     private WebApplicationContext wac;
 
-    @Autowired
-    MockHttpSession session;
+    private MockHttpSession session1;
+    private MockHttpSession session2;
 
     private MockMvc mockMvc;
 
@@ -46,6 +47,9 @@ public class GameControllerTest {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(wac)
                 .build();
+
+        session1 = new MockHttpSession(wac.getServletContext(), UUID.randomUUID().toString());
+        session2 = new MockHttpSession(wac.getServletContext(), UUID.randomUUID().toString());
     }
 
     @Test
@@ -63,9 +67,7 @@ public class GameControllerTest {
                 .andExpect(view().name(VIEW_GAME))
                 .andReturn();
 
-        Map<String, Object> model = mvcResult.getModelAndView().getModel();
-        GameState gameState = (GameState) model.get(BEAN_GAME_STATE);
-        assertNotNull(gameState);
+        GameState gameState = getGameState(mvcResult);
 
         // Verify game state
         assertEquals(GamePhase.IN_PROGRESS, gameState.getGamePhase());
@@ -80,10 +82,41 @@ public class GameControllerTest {
     }
 
     @Test
+    public void testMove() throws Exception {
+        mockMvc.perform(post("/start_game").session(session1))
+                .andExpect(status().isOk());
+
+        MvcResult mvcResult = mockMvc.perform(post("/move").param("player", "PLAYER_1").param("pitIndex", "2").session(session1))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        GameState gameState = getGameState(mvcResult);
+
+        assertEquals(GamePhase.IN_PROGRESS, gameState.getGamePhase());
+        assertEquals(Player.PLAYER_2, gameState.getCurrentPlayer());
+
+        Board board = gameState.getBoard();
+        assertEquals(7, board.getPitStoneCount(Player.PLAYER_1, 1));
+        assertEquals(0, board.getPitStoneCount(Player.PLAYER_1, 2));
+        assertEquals(7, board.getPitStoneCount(Player.PLAYER_1, 3));
+        assertEquals(7, board.getPitStoneCount(Player.PLAYER_1, 4));
+        assertEquals(7, board.getPitStoneCount(Player.PLAYER_1, 5));
+        assertEquals(7, board.getPitStoneCount(Player.PLAYER_1, 6));
+        assertEquals(1, board.getGravaHalStoneCount(Player.PLAYER_1));
+    }
+
+    @Test
     public void testEndGame() throws Exception {
         // TODO think how to test end game better
         mockMvc.perform(post("/end_game"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(VIEW_INIT));
+    }
+
+    private GameState getGameState(MvcResult mvcResult) {
+        Map<String, Object> model = mvcResult.getModelAndView().getModel();
+        GameState gameState = (GameState) model.get(BEAN_GAME_STATE);
+        assertNotNull(gameState);
+        return gameState;
     }
 }
