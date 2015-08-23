@@ -65,11 +65,12 @@ public class GameLogic {
             // Determine if opposite player pit is captured
             if (getPitStoneCount(player, lastSeededPitIndex) == 1) {
                 int oldGravaHalCount = getGravaHalStoneCount(player);
-                int oppositePlayerPitCount = getPitStoneCount(otherPlayer, lastSeededPitIndex);
-                setGravaHalStoneCount(player, 1 + oppositePlayerPitCount + oldGravaHalCount);
+                int oppositePitIndex = size + 1 - lastSeededPitIndex;
+                int oppositePitStoneCount = getPitStoneCount(otherPlayer, oppositePitIndex);
+                setGravaHalStoneCount(player, 1 + oppositePitStoneCount + oldGravaHalCount);
 
                 clearAndGetCount(player, lastSeededPitIndex);
-                clearAndGetCount(otherPlayer, lastSeededPitIndex);
+                clearAndGetCount(otherPlayer, oppositePitIndex);
             }
         }
 

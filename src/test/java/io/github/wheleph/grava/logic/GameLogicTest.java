@@ -189,7 +189,7 @@ public class GameLogicTest {
         Board updatedGameLogic = gameState.getBoard();
         assertEquals(3, updatedGameLogic.getGravaHalStoneCount(player));
         assertEquals(0, updatedGameLogic.getPitStoneCount(player, 3));
-        assertEquals(0, updatedGameLogic.getPitStoneCount(otherPlayer, 3));
+        assertEquals(0, updatedGameLogic.getPitStoneCount(otherPlayer, 1));
         assertEquals(0, updatedGameLogic.getGravaHalStoneCount(otherPlayer));
     }
 
