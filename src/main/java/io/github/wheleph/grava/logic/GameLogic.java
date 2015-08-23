@@ -7,6 +7,10 @@ import io.github.wheleph.grava.model.Player;
 
 import java.util.*;
 
+/**
+ * This class encapsulates game rules.
+ * IT IS NOT THREAD SAFE.
+ */
 public class GameLogic {
     static final int BOARD_SIZE = 6;
     static final int INITIAL_NUMBER_OF_STONES = 6;
@@ -16,11 +20,14 @@ public class GameLogic {
     private Player currentPlayer;
     private GamePhase gamePhase;
 
+    /**
+     * Initializes the game with standard board
+     */
     public GameLogic() {
         this(BOARD_SIZE, INITIAL_NUMBER_OF_STONES, Player.PLAYER_1);
     }
 
-    public GameLogic(int numberOfPits, int initialStoneCount, Player initialPlayer) {
+    GameLogic(int numberOfPits, int initialStoneCount, Player initialPlayer) {
         Map<Player, List<Integer>> initialPlayerPits = new EnumMap<>(Player.class);
         for (Player player : Player.values()) {
             initialPlayerPits.put(player, initPlayerPits(numberOfPits, initialStoneCount));
@@ -33,6 +40,10 @@ public class GameLogic {
         init(playerPits, currentPlayer, currentGamePhase);
     }
 
+    /**
+     * @param pitIndex 1-based pit index
+     * @return state of the game after this move is done
+     */
     public GameState move(Player player, int pitIndex) {
         if (player != currentPlayer) {
             throw new IllegalArgumentException("Wrong player");
@@ -87,10 +98,10 @@ public class GameLogic {
 
             if (otherPlayerTotalNumberOfStones > playerTotalNumberOfStones) {
                 nextPlayer = otherPlayer;
-                gamePhase = GamePhase.WIN;
+                gamePhase = GamePhase.VICTORY;
             } else if (otherPlayerTotalNumberOfStones < playerTotalNumberOfStones) {
                 nextPlayer = player;
-                gamePhase = GamePhase.WIN;
+                gamePhase = GamePhase.VICTORY;
             } else {
                 gamePhase = GamePhase.DRAW;
             }
@@ -101,6 +112,9 @@ public class GameLogic {
         return getGameState();
     }
 
+    /**
+     * @return current state of the game
+     */
     public GameState getGameState() {
         return new GameState(new Board(playerPits), currentPlayer, gamePhase);
     }

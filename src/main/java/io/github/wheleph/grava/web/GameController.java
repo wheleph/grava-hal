@@ -43,6 +43,9 @@ public class GameController {
         return new ModelAndView(VIEW_GAME, GAME_MODEL_VIEW_BEAN, createViewBean(gameState));
     }
 
+    /**
+     * @param pitIndex 1-based pit index
+     */
     @RequestMapping(value = "/move", method = RequestMethod.POST)
     public ModelAndView move(Player player, int pitIndex) {
         GameState oldGameState = gameService.getGameState();
@@ -77,7 +80,7 @@ public class GameController {
             }
         } else if (gamePhase == GamePhase.DRAW) {
             message = getSimpleMessage(MSG_DRAW_GAME);
-        } else if (gamePhase == GamePhase.WIN) {
+        } else if (gamePhase == GamePhase.VICTORY) {
             if (currentPlayer == Player.PLAYER_1) {
                 message = getSimpleMessage(MSG_VICTORY, new Object[] { player1Name });
             } else if (currentPlayer == Player.PLAYER_2){

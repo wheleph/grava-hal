@@ -154,7 +154,7 @@ public class GameLogicTest {
         // method under test
         GameState gameState = gameLogic.move(Player.PLAYER_1, 3);
 
-        assertEquals(GamePhase.WIN, gameState.getGamePhase());
+        assertEquals(GamePhase.VICTORY, gameState.getGamePhase());
         assertEquals(Player.PLAYER_2, gameState.getCurrentPlayer());
 
         // Verify that remaining stones were put in players' grava hals
