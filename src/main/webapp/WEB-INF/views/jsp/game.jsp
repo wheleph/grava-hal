@@ -4,7 +4,7 @@
         <title>Game of Grava Hal</title>
     </head>
     <body>
-        <table border="1" cellpadding="0" cellspacing="0">
+        <table border="1" cellspacing="0">
             <tr>
                 <td></td>
                 <td>Grava Hal</td>
@@ -18,7 +18,7 @@
             </tr>
             <tr>
                 <td>Player 1</td>
-                <td>&nbsp;</td>
+                <td bgcolor="black">&nbsp;</td>
                 <td>
                     <%--TODO think how to extract this common part into some fragment--%>
                     <form action="move" method="POST">
@@ -109,7 +109,7 @@
                         <button type="submit">${gameState.board.getPitStoneCount('PLAYER_2', 1)}</button>
                     </form>
                 </td>
-                <td>&nbsp;</td>
+                <td bgcolor="black">&nbsp;</td>
             </tr>
         </table>
         <p>Current player: ${gameState.currentPlayer}</p>
