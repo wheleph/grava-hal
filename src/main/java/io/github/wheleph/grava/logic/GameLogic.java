@@ -10,7 +10,6 @@ import java.util.*;
 public class GameLogic {
     static final int BOARD_SIZE = 6;
     static final int INITIAL_NUMBER_OF_STONES = 6;
-    private static final int GRAVA_HAL_PIT_INDEX = 0;
 
     private int size;
     private Map<Player, List<Integer>> playerPits = new EnumMap<>(Player.class);
@@ -56,7 +55,7 @@ public class GameLogic {
         }
 
         Player nextPlayer;
-        if (lastSeededPitIndex == GRAVA_HAL_PIT_INDEX) {
+        if (lastSeededPitIndex == Board.GRAVA_HAL_PIT_INDEX) {
             nextPlayer = player;
         } else {
             nextPlayer = Player.nextPlayer(player);
@@ -123,11 +122,11 @@ public class GameLogic {
     }
 
     private void setGravaHalStoneCount(Player player, int stoneCount) {
-        playerPits.get(player).set(GRAVA_HAL_PIT_INDEX, stoneCount);
+        playerPits.get(player).set(Board.GRAVA_HAL_PIT_INDEX, stoneCount);
     }
 
     private int getGravaHalStoneCount(Player player) {
-        return playerPits.get(player).get(GRAVA_HAL_PIT_INDEX);
+        return playerPits.get(player).get(Board.GRAVA_HAL_PIT_INDEX);
     }
 
     // TODO check that pit index is correct

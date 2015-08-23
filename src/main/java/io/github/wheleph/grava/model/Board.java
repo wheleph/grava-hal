@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Board {
+    public static final int GRAVA_HAL_PIT_INDEX = 0;
+
     private Map<Player, List<Integer>> playerPits = new HashMap<>();
 
     public Board(Map<Player, List<Integer>> playerPits) {
@@ -12,7 +14,7 @@ public class Board {
     }
 
     public int getGravaHalStoneCount(Player player) {
-        return playerPits.get(player).get(0);
+        return playerPits.get(player).get(GRAVA_HAL_PIT_INDEX);
     }
 
     // TODO check that pit index is correct
