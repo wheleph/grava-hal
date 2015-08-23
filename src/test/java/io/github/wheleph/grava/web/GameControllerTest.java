@@ -39,6 +39,7 @@ public class GameControllerTest {
     private WebApplicationContext wac;
 
     private MockHttpSession session1;
+    private MockHttpSession session2;
 
     private MockMvc mockMvc;
 
@@ -49,6 +50,7 @@ public class GameControllerTest {
                 .build();
 
         session1 = new MockHttpSession(wac.getServletContext(), UUID.randomUUID().toString());
+        session2 = new MockHttpSession(wac.getServletContext(), UUID.randomUUID().toString());
     }
 
     @Test
@@ -58,7 +60,6 @@ public class GameControllerTest {
                 .andExpect(view().name(VIEW_INIT));
     }
 
-    // TODO test multiple sessions
     @Test
     public void testStartGame() throws Exception {
         MvcResult mvcResult = mockMvc.perform(post("/start_game"))
@@ -78,6 +79,30 @@ public class GameControllerTest {
         assertEquals(0, board.getGravaHalStoneCount(Player.PLAYER_2));
         assertEquals(6, board.getPitStoneCount(Player.PLAYER_1, 1));
         assertEquals(6, board.getPitStoneCount(Player.PLAYER_2, 2));
+    }
+
+    @Test
+    public void testMultipleSessions() throws Exception {
+        // Initialize one session
+        mockMvc.perform(post("/start_game").session(session1))
+                .andExpect(status().isOk());
+
+        // Initialize another session
+        mockMvc.perform(post("/start_game").session(session2))
+                .andExpect(status().isOk());
+        // End game in that session
+        mockMvc.perform(post("/end_game").session(session2))
+                .andExpect(status().isOk());
+
+        // Make move in the first session. Should be valid
+        MvcResult mvcResult = mockMvc.perform(post("/move").param("player", "PLAYER_1").param("pitIndex", "2").session(session1))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        GameState gameState = getGameState(mvcResult);
+
+        assertEquals(GamePhase.IN_PROGRESS, gameState.getGamePhase());
+        assertEquals(Player.PLAYER_2, gameState.getCurrentPlayer());
     }
 
     @Test
@@ -119,7 +144,6 @@ public class GameControllerTest {
 
     @Test
     public void testEndGame() throws Exception {
-        // TODO think how to test end game better
         mockMvc.perform(post("/end_game"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(VIEW_INIT));
