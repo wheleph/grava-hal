@@ -21,7 +21,7 @@ public class GameLogic {
     }
 
     public GameLogic(int numberOfPits, int initialStoneCount, Player initialPlayer) {
-        Map<Player, List<Integer>> initialPlayerPits = new HashMap<>();
+        Map<Player, List<Integer>> initialPlayerPits = new EnumMap<>(Player.class);
         for (Player player : Player.values()) {
             initialPlayerPits.put(player, initPlayerPits(numberOfPits, initialStoneCount));
         }

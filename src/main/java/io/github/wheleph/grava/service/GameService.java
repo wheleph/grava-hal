@@ -12,20 +12,20 @@ import org.springframework.stereotype.Service;
 public class GameService {
     private GameLogic gameLogic;
 
-    public GameState startGame() {
+    public synchronized GameState startGame() {
         gameLogic = new GameLogic();
         return gameLogic.getGameState();
     }
 
-    public GameState move(Player player, int pitIndex) {
+    public synchronized GameState move(Player player, int pitIndex) {
         return gameLogic.move(player, pitIndex);
     }
 
-    public void endGame() {
+    public synchronized void endGame() {
         gameLogic = null;
     }
 
-    public GameState getGameState() {
+    public synchronized GameState getGameState() {
         return gameLogic.getGameState();
     }
 }
