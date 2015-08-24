@@ -10,4 +10,4 @@ This is an implementation of Grava Hal game. The rules can be found at [rules.rt
 # How to run
 
 1. From the root dir execute `mvn jetty:run`
-2. Navigate to `http://localhost:8080/` in you we browser
+2. Navigate to `http://localhost:8080/` in your web browser
