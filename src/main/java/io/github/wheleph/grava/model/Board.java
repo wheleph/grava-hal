@@ -1,6 +1,6 @@
 package io.github.wheleph.grava.model;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +14,7 @@ public class Board {
      */
     public static final int GRAVA_HAL_PIT_INDEX = 0;
 
-    private Map<Player, List<Integer>> playerPits = new HashMap<>();
+    private Map<Player, List<Integer>> playerPits = new EnumMap<>(Player.class);
 
     public Board(Map<Player, List<Integer>> playerPits) {
         this.playerPits = playerPits;
